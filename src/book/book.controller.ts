@@ -7,6 +7,7 @@ import { ObjectId } from 'mongoose';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/multer.options';
+import { Express } from 'express-serve-static-core';
 
 @Controller('api/books')
 export class BookController {
@@ -22,8 +23,8 @@ export class BookController {
     @Post()
     @UseInterceptors(FilesInterceptor('images', 5, multerOptions))
     async(
+        @UploadedFiles() files: Express.Multer.File[],
         @Body() book: CreateBookDto,
-        @UploadedFiles() files: Express.Multer.File[]
 
     ): Promise<Book> {
         const filePaths = files?.map((file) => file.path)
